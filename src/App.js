@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Nav from './Components/Nav'
+import FeaturedArticle from './Containers/FeaturedArticles'
+import BrowseArticles from './Containers/BrowseArticles'
+
+class App extends React.Component {
+  state={
+    articles:[]
+  }
+
+
+  componentDidMount(){
+    fetch("http://localhost:3000/api/v1/articles")
+    .then(r => r.json())
+    .then(articles=> {
+      this.setState({
+        articles:articles
+      })
+    })
+  }
+  render(){
+
+    console.log(this.state.articles)
+   return (
+     <div>
+       <Nav />
+       <BrowseArticles />
+       <FeaturedArticle articles={this.state.articles}/>
+       {/* <footer/> */}
+     </div>
+   )
+ }
 }
 
 export default App;
