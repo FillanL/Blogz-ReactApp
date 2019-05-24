@@ -1,15 +1,16 @@
 import React from "react";
+// import css 
 
 class ArticleCard extends React.Component{
     render(){
-        const {id, title, content}=this.props.article
+        const {id, title, content, keyword, category}=this.props.article
         return(
            <div id={id}>
                <img src="#" alt=""/>
                <h2>Title: {title}</h2>
-               <p> brieff summarry or 30 chars wrapped</p>
                <p>{content}</p>
-               <p></p>
+               <p>{category}</p>
+               <p>key:{keyword}</p>
            </div>
         )
     }
