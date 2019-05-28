@@ -66,3 +66,53 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+
+
+ blog
+
+User
+Has-many articles
+f_Name
+L_name
+Username
+Location
+
+
+
+Article
+Belongs to a user
+user_id
+Title 
+Contents
+Keywords
+Category 
+Sub Category 
+
+
+SavedArticle
+Belongs to a user
+Article_id
+
+rails new Blogzz-back-end --api --database=postgresql
+rails g resource User first_name last_name username location — no-test-framework
+
+rails g resource saved Article user_id:integer title content keyword category sub_category — no-test-framework
+
+rails g resource SavedArticle user_id:integer article_id:integer  —no-test-framework
+
+
+
+
+<!-- fix filter -->
+
+<!-- to do -->
+create new post
+save post
+delete post
+delete post from fav
+log in user
+log out user
+auth
+auth

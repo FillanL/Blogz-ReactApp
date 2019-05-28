@@ -1,17 +1,22 @@
-import React from "react";
+import React from 'react';
+import '../App.css';
 // import css 
 
-class ArticleCard extends React.Component{
-    render(){
-        const {id, title, content, keyword, category}=this.props.article
-        return(
-           <div id={id}>
-               <img src="#" alt=""/>
-               <h2>Title: {title}</h2>
-               <p>{content}</p>
-               <p>{category}</p>
-               <p>key:{keyword}</p>
-           </div>
+class ArticleCard extends React.Component {
+    render() {
+        const { id, title, content, keyword, category, user, article_url } = this.props.article
+
+        return (
+            <div className="line-height" id={id} style={{ background: "white", padding: "10px" }}>
+                <img src={article_url} alt="title" />
+                <h4>Title: {title}</h4>
+                <p>{category}</p>
+                <p>{content.substring(0, 90)} <a href="a">show more</a>  </p>
+                <p>key:{keyword}</p>
+                <p>by:{user.username}</p>
+                <button>add to Fav</button>
+
+            </div>
         )
     }
 }

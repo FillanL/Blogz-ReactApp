@@ -1,13 +1,17 @@
 import React from "react";
+import '../App.css'
+
 
 class Nav extends React.Component{
     render(){
         return(
-            <ul>
+            <ul className='no-dec'>
                 <li>Logo</li>
-                <li>home</li>
-                <li>browse</li>
-                <li>saved</li>
+                <li onClick={(e)=>this.props.handleUrl(e)}>home</li>
+                <li onClick={(e)=>this.props.handleUrl(e)}>browse</li>
+                <li onClick={(e)=>this.props.handleUrl(e)}>create</li>
+                <li onClick={(e)=>this.props.handleUrl(e)}>saved</li>
+                <li onClick={(e)=>this.props.handleUrl(e)}>Log In</li>
             </ul>
         )
     }

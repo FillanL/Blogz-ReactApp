@@ -1,10 +1,46 @@
+.featuredContain {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background-color: rgb(141, 223, 250);
+    grid-column-gap: 10px;
+    padding: 10px;
+    height: 350px;
 
+}
+
+.browseContain {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    background-color: lightcoral;
+    grid-gap: 10px;
+    padding: 10px;
+    /* height: 300px; */
+
+}
+
+.no-dec {
+    list-style: none;
+    text-decoration: none;
+    /* display: inline; */
+}
+
+.no-dec li {
+    display: inline;
+    margin-left: 20px;
+}
+
+.line-height {
+    /* line-height: 1px; */
+    line-height: 1em;
+}
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
