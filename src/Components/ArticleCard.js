@@ -7,7 +7,7 @@ class ArticleCard extends React.Component {
         const { id, title, content, keyword, category, user, article_url } = this.props.article
 
         return (
-            <div className="line-height" id={id} style={{ background: "white", padding: "10px" }}>
+            <div className="ui card" id={id} >
                 <img src={article_url} alt="title" />
                 <h4>Title: {title}</h4>
                 <p>{category}</p>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import ArticleCard from '../Components/ArticleCard'
 import '../App.css'
 
@@ -6,16 +6,22 @@ import '../App.css'
 class BrowseArticles extends React.Component {
     render() {
         return (
-            <div>
-                <input onChange={(e) => this.props.onSearchChange(e)} type="search" value={this.props.searchVal} placeholder="Search Article...." />
-                <button>GO</button>
+            <Fragment>
+                <input className="ui big input focus" onChange={(e) => this.props.onSearchChange(e)} type="search" value={this.props.searchVal} placeholder="Search Article...." />
+                
+                <button className="ui button">GO</button>
+                <div className="ui four column grid">
 
-                <div className="browseContain" style={{ color: "green" }}>
-                    {this.props.articles.map(article =>
-                        <ArticleCard key={article.id} article={article} />
-                    )}
+                    {/* <h2>BrowseArticles</h2> */}
+
+                    <div className="browseContain" style={{ color: "green" }}>
+                        {this.props.articles.map(article =>
+                            <ArticleCard key={article.id} article={article} />
+                        )}
+                    </div>
                 </div>
-            </div>
+
+            </Fragment>
         )
     }
 }

@@ -1,16 +1,17 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
+
 
 class LogIn extends React.Component {
 
     render() {
-        const { handleSignUpChange, handleSignInChange, signUpVal, signUpSubmit, signInVal } = this.props
+        const { handleSignUpChange, handleSignInChange, signUpVal, signUpSubmit, signInVal, handleLogInSubmit } = this.props
 
         return (
             <div>
 
-                <form>
+                <form className="ui large form" onSubmit={(e)=>handleLogInSubmit(e)}>
                     <label>Username</label>
-
                     <input
                         onChange={(e) => handleSignInChange(e)}
                         name="username"
@@ -25,10 +26,10 @@ class LogIn extends React.Component {
                         type="password"
                         value={signInVal.password}
                     />
-                    <button>Log in</button>
+                    <button className="ui primary button">Log in</button>
                 </form>
 
-                <form onSubmit={signUpSubmit}>
+                <form className="ui large form" onSubmit={(e)=>signUpSubmit(e)}>
                     <label>First name</label>
                     <input
                         onChange={(e) => handleSignUpChange(e)} name="firstName" type="text"
@@ -57,11 +58,11 @@ class LogIn extends React.Component {
                     <input
                         onChange={(e) => handleSignUpChange(e)} name="userUrl" type="text" value={signUpVal.userUrl}
                     />
-                    <button>sign up</button>
+                    <button className="ui primary button">Sign up</button>
                 </form>
             </div>
 
         )
     }
 }
-export default LogIn;
+export default withRouter(LogIn);

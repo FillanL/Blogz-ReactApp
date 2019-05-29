@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom'
 
 import Nav from './Components/Nav'
 import FeaturedArticle from './Containers/FeaturedArticles'
@@ -14,7 +14,7 @@ const NUMFEATURED = 4
 class App extends React.Component {
 
   state = {
-    // Page: "home",
+    currentUser: null,
     articles: [],
     featured: [],
     featuredStartIndex: 0,
@@ -38,11 +38,29 @@ class App extends React.Component {
       password: ""
     }
   }
-  handleUrl = (e) => {
+
+
+
+  // ---------Login/LogOut ----------------
+
+  handleCurrentUser = (User) => {
+    localStorage.setItem('token', User.id)
+
     this.setState({
-      Page: e.target.textContent
+      currentUser: User,
+      signInVal: {
+        username: "",
+        password: ""
+      }
     })
   }
+  handleLogOut = () => {
+    localStorage.removeItem('token')
+    this.setState({
+      currentUser: null
+    })
+  }
+
   // ---------article scroller----------------
   handleMoreBtnClick = () => {
     // to make code readable did not use !
@@ -68,20 +86,40 @@ class App extends React.Component {
   // -------------User Sign IN Logics----------------
   handleSignInChange = (e) => {
     // e.preventDefault()
-    console.log()
-
     this.setState({
       signInVal: {
         ...this.state.signInVal,
         [e.target.name]: e.target.value
       }
     })
+  }
+  handleLogInSubmit = (e) => {
+    e.preventDefault()
+    console.log("here")
 
+    fetch("http://localhost:3000/api/v1/auth", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }, body: JSON.stringify({
+        "user": this.state.signInVal
+      })
+    }).then(r => r.json())
+      .then(user => {
+        // console.log(user.error)
+        if (user.error === "user or password could not be found") {
+          console.log("here")
+        } else {
+          console.log("not there")
+          this.handleCurrentUser(user)
+          this.props.history.push("/")
+        }
+      })
   }
 
   // -------------User Sign UP Logics----------------
   handleSignUpChange = (e) => {
-    // console.log(e.target.value)
     this.setState({
       signUpVal: {
         ...this.state.signUpVal,
@@ -92,13 +130,14 @@ class App extends React.Component {
 
   signUpSubmit = (e) => {
     e.preventDefault()
+
+    console.log('signuppp')
     fetch("http://localhost:3000/api/v1/users", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },
-
       body: JSON.stringify({
         "user": {
           first_name: this.state.signUpVal.firstName,
@@ -110,25 +149,22 @@ class App extends React.Component {
         }
       })
     })
-
   }
   // ---------------Post new Article-----------------
   postSubmit = (e) => {
     e.preventDefault()
 
-    fetch("http://localhost:3000/api/v1/articles",
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        },
-        body: JSON.stringify({
-          article: this.state.postSubmitVal
-        })
+    fetch("http://localhost:3000/api/v1/articles", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        article: this.state.postSubmitVal
       })
+    })
       .then(this.setState({
-        Page: "browse",
         postSubmitVal: {
           title: "",
           keyword: "",
@@ -161,56 +197,93 @@ class App extends React.Component {
         })
       })
   }
+
+
   render() {
     const { featuredStartIndex, featured, articles, searchVal, postSubmitVal, signUpVal, signInVal } = this.state
 
     // functions ONLY
-    const { signUpSubmit } = this
+    const { signUpSubmit, handleLogInSubmit, handleCurrentUser, handleLogOut } = this
 
     const upDateFilter = articles.filter(article => article.title.toLowerCase().includes(this.state.searchVal.toLowerCase())
     )
 
-    console.log('signUpVal', signInVal)
+    console.log('handleCurrentUser', this.state.currentUser)
 
     return (
       <div>
         <Nav
-          handleUrl={this.handleUrl}
+          currentUser={this.state.currentUser}
+          handleLogOut={handleLogOut}
         />
-        {this.state.Page === "home" ?
-          <FeaturedArticle
-            articles={featured.slice(featuredStartIndex, featuredStartIndex + NUMFEATURED)}
-            onLessBtnClick={this.handleLessBtnClick}
-            onMoreBtnClick={this.handleMoreBtnClick}
-          /> :
-          this.state.Page === "browse" ?
+
+        <Switch>
+          <Route exact path="/" render={() =>
+            <FeaturedArticle
+              articles={featured.slice(featuredStartIndex, featuredStartIndex + NUMFEATURED)}
+              onLessBtnClick={this.handleLessBtnClick}
+              onMoreBtnClick={this.handleMoreBtnClick}
+            />} />
+          <Route path="/browse" render={() =>
             <BrowseArticles
               articles={upDateFilter}
               onSearchChange={this.handleSearchChange}
               searchVal={searchVal}
-            /> :
-            this.state.Page === "create" ?
+            />}
+          />
+
+          <Route path="/login" render={() =>
+            <LogIn
+              signUpVal={signUpVal}
+              handleSignUpChange={this.handleSignUpChange}
+              handleSignInChange={this.handleSignInChange}
+              handleLogInSubmit={handleLogInSubmit}
+              signUpSubmit={signUpSubmit}
+              signInVal={signInVal}
+              handleCurrentUser={handleCurrentUser}
+            />}
+          />
+          <Route path="/create" render={() =>
+            <NewPost
+              postSubmit={this.postSubmit}
+              onSubmitFormChange={this.handleSubmitFormChange}
+              postSubmitVal={postSubmitVal}
+            />}
+          />
+        </Switch>
+
+
+
+        {/* {this.state.Page === "home" ?
+          <FeaturedArticle
+            articles={featured.slice(featuredStartIndex, featuredStartIndex + NUMFEATURED)}
+            onLessBtnClick={this.handleLessBtnClick}
+            onMoreBtnClick={this.handleMoreBtnClick}
+          />  */}
+        {/* // this.state.Page === "browse" ? */}
+        {/* <BrowseArticles
+              articles={upDateFilter}
+              onSearchChange={this.handleSearchChange}
+              searchVal={searchVal}
+            /> 
               <NewPost
                 postSubmit={this.postSubmit}
                 onSubmitFormChange={this.handleSubmitFormChange}
                 postSubmitVal={postSubmitVal}
               />
-              : this.state.Page === "Log In" ?
-                <LogIn
+            */}
+
+        {/* <LogIn
                   signUpVal={signUpVal}
                   handleSignUpChange={this.handleSignUpChange}
                   handleSignInChange={this.handleSignInChange}
                   signUpSubmit={signUpSubmit}
-                  signInVal={signInVal}
-                />
-                : null
+                  signInVal={this.signInVal}
+                /> */}
 
-        }
-        {/* <Switch>
-          <Route exact path="/" Component={FeaturedArticle} />
-          <Route path="/browse" Component={BrowseArticles} />
-          <Route path="/login" Component={LogIn} />
-        </Switch> */}
+
+
+
 
         {/* <footer/> */}
       </div>
@@ -218,4 +291,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);
