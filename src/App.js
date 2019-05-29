@@ -1,11 +1,17 @@
 import React from 'react';
-import { Switch, Route, withRouter } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStroopwafel } from '@fortawesome/free-solid-svg-icons';
+// library.add(faStroopwafel);
 
 import Nav from './Components/Nav'
 import FeaturedArticle from './Containers/FeaturedArticles'
 import BrowseArticles from './Containers/BrowseArticles'
 import NewPost from './Containers/NewPost'
 import LogIn from './Components/LogIn'
+import Slider from './Components/Slider'
+
 
 
 // number article to show per 
@@ -95,7 +101,7 @@ class App extends React.Component {
   }
   handleLogInSubmit = (e) => {
     e.preventDefault()
-    console.log("here")
+    // console.log("here")
 
     fetch("http://localhost:3000/api/v1/auth", {
       method: 'POST',
@@ -111,7 +117,7 @@ class App extends React.Component {
         if (user.error === "user or password could not be found") {
           console.log("here")
         } else {
-          console.log("not there")
+          // console.log("not there")
           this.handleCurrentUser(user)
           this.props.history.push("/")
         }
@@ -184,6 +190,8 @@ class App extends React.Component {
   }
   // ---------------after components mounted------------
   componentDidMount() {
+
+
     fetch("http://localhost:3000/api/v1/articles")
       .then(r => r.json())
       .then(articles => {
@@ -196,6 +204,25 @@ class App extends React.Component {
           featured: updatedfeatured
         })
       })
+
+      const token = localStorage.getItem("token")
+      if (token) {
+
+      fetch("http://localhost:3000/api/v1/auth", {
+        headers: {
+          Authenticate: token
+        }
+      })
+      .then(r => r.json())
+      .then(user =>{
+        if (!user.error){
+          this.setState({
+            currentUser: user
+          })
+        }
+      })
+    }
+
   }
 
 
@@ -208,7 +235,7 @@ class App extends React.Component {
     const upDateFilter = articles.filter(article => article.title.toLowerCase().includes(this.state.searchVal.toLowerCase())
     )
 
-    console.log('handleCurrentUser', this.state.currentUser)
+    // console.log('handleCurrentUser', this.state.currentUser)
 
     return (
       <div>
@@ -216,14 +243,16 @@ class App extends React.Component {
           currentUser={this.state.currentUser}
           handleLogOut={handleLogOut}
         />
-
+{/* <FontAwesomeIcon icon="fas fa-anchor" /> */}
         <Switch>
-          <Route exact path="/" render={() =>
+          <Route exact path="/" render={() =><>
+            <Slider />
             <FeaturedArticle
               articles={featured.slice(featuredStartIndex, featuredStartIndex + NUMFEATURED)}
               onLessBtnClick={this.handleLessBtnClick}
               onMoreBtnClick={this.handleMoreBtnClick}
-            />} />
+            />
+            </>} />
           <Route path="/browse" render={() =>
             <BrowseArticles
               articles={upDateFilter}
@@ -251,40 +280,6 @@ class App extends React.Component {
             />}
           />
         </Switch>
-
-
-
-        {/* {this.state.Page === "home" ?
-          <FeaturedArticle
-            articles={featured.slice(featuredStartIndex, featuredStartIndex + NUMFEATURED)}
-            onLessBtnClick={this.handleLessBtnClick}
-            onMoreBtnClick={this.handleMoreBtnClick}
-          />  */}
-        {/* // this.state.Page === "browse" ? */}
-        {/* <BrowseArticles
-              articles={upDateFilter}
-              onSearchChange={this.handleSearchChange}
-              searchVal={searchVal}
-            /> 
-              <NewPost
-                postSubmit={this.postSubmit}
-                onSubmitFormChange={this.handleSubmitFormChange}
-                postSubmitVal={postSubmitVal}
-              />
-            */}
-
-        {/* <LogIn
-                  signUpVal={signUpVal}
-                  handleSignUpChange={this.handleSignUpChange}
-                  handleSignInChange={this.handleSignInChange}
-                  signUpSubmit={signUpSubmit}
-                  signInVal={this.signInVal}
-                /> */}
-
-
-
-
-
         {/* <footer/> */}
       </div>
     )

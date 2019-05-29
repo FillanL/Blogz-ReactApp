@@ -1,10 +1,12 @@
 .featuredContain {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    background-color: rgb(141, 223, 250);
-    grid-column-gap: 10px;
-    padding: 10px;
-    height: 350px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    background-color: antiquewhite;
+    justify-content: space-between;
+    min-height: 100%;
 
 }
 
@@ -35,7 +37,39 @@
     line-height: 1em;
 }
 
-@keyframes App-logo-spin {
+.article-carousel-container {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.mainSlider {
+    padding: 0px 20px;
+    height: 400px;
+    width: 500px;
+    overflow: hidden;
+    margin-top: 40px;
+}
+
+.mainSlider img {
+    /* max-width: 100%; */
+    max-height: 100%;
+
+}
+
+.feat-padding {
+    padding: 0 10px;
+}
+
+#feat-art{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 15px;
+    
+}
+
+
+/* @keyframes App-logo-spin {
     from {
         transform: rotate(0deg);
     }
@@ -43,4 +77,4 @@
     to {
         transform: rotate(360deg);
     }
-}
+} */
