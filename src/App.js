@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStroopwafel } from '@fortawesome/free-solid-svg-icons';
+// import { faTwitter } from '@fortawesome/free-solid-svg-icons';
 // library.add(faStroopwafel);
 
 import Nav from './Components/Nav'
@@ -11,6 +11,7 @@ import BrowseArticles from './Containers/BrowseArticles'
 import NewPost from './Containers/NewPost'
 import LogIn from './Components/LogIn'
 import Slider from './Components/Slider'
+import ArticleShow from './Components/ArticleShow';
 
 
 
@@ -123,6 +124,34 @@ class App extends React.Component {
         }
       })
   }
+  // -======================================
+  // random num in array
+  randomNum = () => {
+    let i = 0
+    let uniqRandom = []
+    let artCount = this.state.articles.length
+
+    while (i < 8) {
+      let jnum = Math.floor(Math.random() * artCount) + 1
+
+      if (uniqRandom.includes(jnum) === false) {
+        uniqRandom.push(jnum)
+        i++
+      }
+    }
+    // uniqRandom.map(num =>
+      // this.state.articles.filter(article =>
+      //   {
+      //    (uniqRandom.includes(article.id)) ?
+      //      return article : null
+        
+      // })
+  }
+
+
+
+
+  // ===================================
 
   // -------------User Sign UP Logics----------------
   handleSignUpChange = (e) => {
@@ -205,22 +234,22 @@ class App extends React.Component {
         })
       })
 
-      const token = localStorage.getItem("token")
-      if (token) {
+    const token = localStorage.getItem("token")
+    if (token) {
 
       fetch("http://localhost:3000/api/v1/auth", {
         headers: {
           Authenticate: token
         }
       })
-      .then(r => r.json())
-      .then(user =>{
-        if (!user.error){
-          this.setState({
-            currentUser: user
-          })
-        }
-      })
+        .then(r => r.json())
+        .then(user => {
+          if (!user.error) {
+            this.setState({
+              currentUser: user
+            })
+          }
+        })
     }
 
   }
@@ -235,7 +264,7 @@ class App extends React.Component {
     const upDateFilter = articles.filter(article => article.title.toLowerCase().includes(this.state.searchVal.toLowerCase())
     )
 
-    // console.log('handleCurrentUser', this.state.currentUser)
+    // console.log("rand", this.randomNum())
 
     return (
       <div>
@@ -243,16 +272,16 @@ class App extends React.Component {
           currentUser={this.state.currentUser}
           handleLogOut={handleLogOut}
         />
-{/* <FontAwesomeIcon icon="fas fa-anchor" /> */}
+        {/* <FontAwesomeIcon icon={fasTwitter} /> */}
         <Switch>
-          <Route exact path="/" render={() =><>
+          <Route exact path="/" render={() => <>
             <Slider />
             <FeaturedArticle
               articles={featured.slice(featuredStartIndex, featuredStartIndex + NUMFEATURED)}
               onLessBtnClick={this.handleLessBtnClick}
               onMoreBtnClick={this.handleMoreBtnClick}
             />
-            </>} />
+          </>} />
           <Route path="/browse" render={() =>
             <BrowseArticles
               articles={upDateFilter}
@@ -279,6 +308,12 @@ class App extends React.Component {
               postSubmitVal={postSubmitVal}
             />}
           />
+          <Route path="/article" render={() =>
+            <ArticleShow
+            // article={this.state.articles.find(article=>  article === article)}
+            />}
+          />
+
         </Switch>
         {/* <footer/> */}
       </div>
