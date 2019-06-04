@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { library } from '@fortawesome/fontawesome-svg-core';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faTwitter } from '@fortawesome/free-solid-svg-icons';
 // library.add(faStroopwafel);
 
@@ -12,6 +12,9 @@ import NewPost from './Containers/NewPost'
 import LogIn from './Components/LogIn'
 import Slider from './Components/Slider'
 import ArticleShow from './Components/ArticleShow';
+import RandomArticles from './Components/RandomArticles';
+import Profile from './Components/Profile';
+
 
 
 
@@ -100,9 +103,9 @@ class App extends React.Component {
       }
     })
   }
+
   handleLogInSubmit = (e) => {
     e.preventDefault()
-    // console.log("here")
 
     fetch("http://localhost:3000/api/v1/auth", {
       method: 'POST',
@@ -131,25 +134,21 @@ class App extends React.Component {
     let uniqRandom = []
     let artCount = this.state.articles.length
 
-    while (i < 8) {
-      let jnum = Math.floor(Math.random() * artCount) + 1
+    if (artCount > 8) {
+      while (i < 8) {
+        let jnum = Math.floor(Math.random() * artCount) + 1
 
-      if (uniqRandom.includes(jnum) === false) {
-        uniqRandom.push(jnum)
-        i++
+        if (uniqRandom.includes(jnum) === false) {
+          uniqRandom.push(jnum)
+          i++
+        }
       }
+      return this.state.articles.filter(article => uniqRandom.includes(article.id))
+      // return uniqRandom
+    } else {
+      return 0
     }
-    // uniqRandom.map(num =>
-      // this.state.articles.filter(article =>
-      //   {
-      //    (uniqRandom.includes(article.id)) ?
-      //      return article : null
-        
-      // })
   }
-
-
-
 
   // ===================================
 
@@ -196,7 +195,10 @@ class App extends React.Component {
         Accept: 'application/json'
       },
       body: JSON.stringify({
-        article: this.state.postSubmitVal
+        article: {
+          ...this.state.postSubmitVal,
+          user_id: localStorage.getItem("token")
+        }
       })
     })
       .then(this.setState({
@@ -217,9 +219,19 @@ class App extends React.Component {
       }
     })
   }
+  // ---------update and delete article------------------
+
+  updateArticle = () => {
+    console.log("update");
+
+  }
+  deleteArticle = () => {
+    console.log("delete");
+
+  }
+
   // ---------------after components mounted------------
   componentDidMount() {
-
 
     fetch("http://localhost:3000/api/v1/articles")
       .then(r => r.json())
@@ -235,8 +247,8 @@ class App extends React.Component {
       })
 
     const token = localStorage.getItem("token")
-    if (token) {
 
+    if (token) {
       fetch("http://localhost:3000/api/v1/auth", {
         headers: {
           Authenticate: token
@@ -250,21 +262,46 @@ class App extends React.Component {
             })
           }
         })
-    }
 
+      fetch('http://localhost:3000/api/v1/users')
+        .then(r => r.json())
+        .then(users => {
+          this.setState({
+            users: users
+          }, console.log("mouting", this.state.users))
+
+        })
+
+    }
   }
 
 
   render() {
+    // States variables
     const { featuredStartIndex, featured, articles, searchVal, postSubmitVal, signUpVal, signInVal } = this.state
 
     // functions ONLY
-    const { signUpSubmit, handleLogInSubmit, handleCurrentUser, handleLogOut } = this
+    const { signUpSubmit, handleLogInSubmit, handleCurrentUser, handleLogOut, updateArticle, deleteArticle } = this
 
     const upDateFilter = articles.filter(article => article.title.toLowerCase().includes(this.state.searchVal.toLowerCase())
     )
+    const token = localStorage.getItem("token")
 
-    // console.log("rand", this.randomNum())
+    const current = () => {
+      if (this.state.users) {
+        return this.state.users.find(user => user.id === Number(token))
+      }
+    }
+
+    const myArticles = () => {
+      if (this.state.articles) {
+        return this.state.articles.filter(article => article.user.id === Number(token))
+      }
+    }
+    // console.log(token, current())
+    console.log("my art", myArticles())
+
+
 
     return (
       <div>
@@ -281,9 +318,14 @@ class App extends React.Component {
               onLessBtnClick={this.handleLessBtnClick}
               onMoreBtnClick={this.handleMoreBtnClick}
             />
+            <RandomArticles
+              articles={this.state.randomArticles}
+              randomNum={this.randomNum}
+            />
           </>} />
           <Route path="/browse" render={() =>
             <BrowseArticles
+            // here
               articles={upDateFilter}
               onSearchChange={this.handleSearchChange}
               searchVal={searchVal}
@@ -313,7 +355,15 @@ class App extends React.Component {
             // article={this.state.articles.find(article=>  article === article)}
             />}
           />
-
+          <Route path="/profile" render={() =>
+            <Profile
+            updateArticle={updateArticle}
+            deleteArticle={deleteArticle}
+              user={current}
+              myArticles={myArticles}
+            />
+          }
+          />
         </Switch>
         {/* <footer/> */}
       </div>

@@ -5,7 +5,7 @@ class NewPost extends React.Component {
         const { onSubmitFormChange, postSubmitVal,postSubmit } = this.props
         return (
             <div>
-                <form onSubmit={postSubmit}>
+                <form className="ui form" onSubmit={postSubmit}>
                     <label htmlFor="title">title</label><br></br>
                     <input
                         onChange={(e) => onSubmitFormChange(e)} type="text" name="title" value={postSubmitVal.title}
@@ -28,7 +28,7 @@ class NewPost extends React.Component {
                         style={{ fontSize: "1.25em", lineHeight: "1.2em" }} rows="10" cols="80" placeholder="Tell your story ..."
                     ></textarea>
                     <br></br>
-                    <button>SUBMIT</button>
+                    <button className="ui button" >SUBMIT</button>
 
                 </form>
             </div>

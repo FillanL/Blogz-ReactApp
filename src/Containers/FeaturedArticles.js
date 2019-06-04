@@ -8,7 +8,7 @@ class FeaturedArticle extends React.Component {
 
         return (
             <div className="feat-padding">
-                <h2>featured Articles</h2>
+                <h2>Featured Articles</h2>
                 <div className=" fluid article-carousel-container">
                     <button onClick={() => this.props.onLessBtnClick()}> Less </button>
                     <div className="featuredContain" id="feat-art">

@@ -10,7 +10,7 @@ class LogIn extends React.Component {
         return (
             <div>
 
-                <form className="ui large form" onSubmit={(e)=>handleLogInSubmit(e)}>
+                <form className="ui form" onSubmit={(e)=>handleLogInSubmit(e)}>
                     <label>Username</label>
                     <input
                         onChange={(e) => handleSignInChange(e)}

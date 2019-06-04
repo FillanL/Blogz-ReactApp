@@ -7,12 +7,18 @@ class BrowseArticles extends React.Component {
     render() {
         return (
             <Fragment>
-                <input className="ui big input focus" onChange={(e) => this.props.onSearchChange(e)} type="search" value={this.props.searchVal} placeholder="Search Article...." />
-                
-                <button className="ui button">GO</button>
-                <div className="ui four column grid">
+                <div className="search-contain">
 
-                    {/* <h2>BrowseArticles</h2> */}
+                    <input
+                        className=" browse-search" 
+                        onChange={(e) => this.props.onSearchChange(e)} 
+                        type="search" value={this.props.searchVal} 
+                        placeholder="Search Article...."
+                    />
+                    {/* <button className="ui button">GO</button> */}
+                </div>
+
+                <div className="container-padding ">
 
                     <div className="browseContain" style={{ color: "green" }}>
                         {this.props.articles.map(article =>
