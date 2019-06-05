@@ -22,7 +22,7 @@ class BrowseArticles extends React.Component {
 
                     <div className="browseContain" style={{ color: "green" }}>
                         {this.props.articles.map(article =>
-                            <ArticleCard key={article.id} article={article} />
+                            <ArticleCard addFave={this.props.addFave} key={article.id} article={article} />
                         )}
                     </div>
                 </div>

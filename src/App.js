@@ -201,14 +201,21 @@ class App extends React.Component {
         }
       })
     })
-      .then(this.setState({
-        postSubmitVal: {
-          title: "",
-          keyword: "",
-          category: "",
-          content: ""
-        }
-      }))
+      .then(r => r.json())
+      .then(user => {
+
+        this.setState({
+          articles: [...this.state.articles, user],
+          postSubmitVal: {
+            title: "",
+            keyword: "",
+            category: "",
+            content: ""
+          }
+        })
+      }
+
+      )
   }
   handleSubmitFormChange = (e) => {
     // controll newPost Form values
@@ -228,6 +235,24 @@ class App extends React.Component {
   deleteArticle = () => {
     console.log("delete");
 
+  }
+
+  addFave = (id) => {
+    const token = localStorage.getItem("token")
+
+    fetch("http://localhost:3000/api/v1/saved_articles", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        article: {
+          user_id: token,
+          article_id: id
+        }
+      })
+    })
   }
 
   // ---------------after components mounted------------
@@ -314,18 +339,21 @@ class App extends React.Component {
           <Route exact path="/" render={() => <>
             <Slider />
             <FeaturedArticle
+              addFave={this.addFave}
               articles={featured.slice(featuredStartIndex, featuredStartIndex + NUMFEATURED)}
               onLessBtnClick={this.handleLessBtnClick}
               onMoreBtnClick={this.handleMoreBtnClick}
             />
             <RandomArticles
+              addFave={this.addFave}
               articles={this.state.randomArticles}
               randomNum={this.randomNum}
             />
           </>} />
           <Route path="/browse" render={() =>
             <BrowseArticles
-            // here
+              // here
+              addFave={this.addFave}
               articles={upDateFilter}
               onSearchChange={this.handleSearchChange}
               searchVal={searchVal}
@@ -357,8 +385,8 @@ class App extends React.Component {
           />
           <Route path="/profile" render={() =>
             <Profile
-            updateArticle={updateArticle}
-            deleteArticle={deleteArticle}
+              updateArticle={updateArticle}
+              deleteArticle={deleteArticle}
               user={current}
               myArticles={myArticles}
             />

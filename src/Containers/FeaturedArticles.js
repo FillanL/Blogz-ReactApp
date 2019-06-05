@@ -15,7 +15,10 @@ class FeaturedArticle extends React.Component {
 
                         {this.props.articles.map(article =>
 
-                            <ArticleCard key={article.id} article={article} />
+                            <ArticleCard 
+                            addFave={this.props.addFave}
+                            key={article.id} article={article} 
+                            />
                         )}
                     </div>
                     <button onClick={() => { this.props.onMoreBtnClick() }}>more</button>
