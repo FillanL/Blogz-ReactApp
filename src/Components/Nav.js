@@ -17,7 +17,10 @@ class Nav extends React.Component {
                     this.props.currentUser ?
                         <Fragment>
                             <li><Link to='/create'>Create</Link></li>
-                            <li>saved</li>
+                            <Link to='/favorites'>
+                            
+                            <li>favorites</li>
+                            </Link>
                             <li><Link to="/profile">Profile</Link></li>
                             <li onClick={() => handleLogOut()}>
                                 <Link to='/'> Log out</Link>

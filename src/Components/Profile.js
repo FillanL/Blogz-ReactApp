@@ -50,7 +50,14 @@ class Profile extends React.Component {
 
                     <div className="profile-grid">
 
-                        {this.props.myArticles().map(article => <ArticleCard updateArticle={this.props.updateArticle} deleteArticle={this.props.deleteArticle} key={article.id} article={article} />)}
+                        {this.props.myArticles().map(article => 
+                        <ArticleCard 
+                         updateArticle={this.props.updateArticle}
+                          deleteArticle={this.props.deleteArticle}
+                           key={article.id} 
+                           article={article} 
+                           />)
+                        }
                     </div>
 
                 </>

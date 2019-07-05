@@ -20,15 +20,24 @@ class ArticleCard extends React.Component {
                 </p>
                 <Link to='/article'> show more
                     </Link>
-                {/* <p>key:{keyword}</p> */}
+                { user.username ?
                 <p>Author: {user.username}</p>
+                :
+                null
+                
+                }
                 {
                     user.id === Number(localStorage.getItem("token")) ?
                         <>
-                            <button onClick={() => this.props.updateArticle()} className="ui primary button">Update</button>
+                        <Link to={`/editpost/${id}` }
+                        update={this.props.updateArticle} id={id} >
+                            <button  className="ui primary button">Update
+                            </button>
+                        </Link>
                             <button
-                                onClick={() => this.props.deleteArticle()}
-                                className="ui red button">Delete</button>
+                                onClick={() => this.props.deleteArticle(id)}
+                                className="ui red button">Delete
+                            </button>
                         </>
 
                         :

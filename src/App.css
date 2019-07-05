@@ -133,3 +133,12 @@
 .browse-search:focus {
     outline-style: none;
 }
+.fav-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 20px;
+    width: 77%;
+    margin-left: 10%;
+    grid-column-gap: 1%;
+
+}

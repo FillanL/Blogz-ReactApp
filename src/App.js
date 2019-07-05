@@ -14,7 +14,8 @@ import Slider from './Components/Slider'
 import ArticleShow from './Components/ArticleShow';
 import RandomArticles from './Components/RandomArticles';
 import Profile from './Components/Profile';
-
+import Favorites from './Components/favorites';
+import EditPost from './Components/editPost'
 
 
 
@@ -228,15 +229,17 @@ class App extends React.Component {
   }
   // ---------update and delete article------------------
 
-  updateArticle = () => {
-    console.log("update");
+  updateArticle = (id) => {
+    // console.log("update", id);
+    fetch(`http://localhost:3000/api/v1/articles/${id}`, {
+      method: 'UPDATE',
+    })
+  }
+  deleteArticle = (id) => {
+    console.log("delete", id);
 
   }
-  deleteArticle = () => {
-    console.log("delete");
-
-  }
-
+// ----------------------------------
   addFave = (id) => {
     const token = localStorage.getItem("token")
 
@@ -385,6 +388,22 @@ class App extends React.Component {
           />
           <Route path="/profile" render={() =>
             <Profile
+              updateArticle={updateArticle}
+              deleteArticle={deleteArticle}
+              user={current}
+              myArticles={myArticles}
+            />
+          }
+          />
+           <Route path="/favorites" render={() =><Favorites
+              updateArticle={updateArticle}
+              deleteArticle={deleteArticle}
+              user={current}
+              myArticles={myArticles}
+            />
+          }
+          />
+          <Route path="/editpost" render={() =><EditPost
               updateArticle={updateArticle}
               deleteArticle={deleteArticle}
               user={current}
