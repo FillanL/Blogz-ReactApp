@@ -2,6 +2,8 @@
 
 ## BLOGZ
 Blogging platform where users can write personal blogs, share insights and discuss pressing events 
+backEnd Link:
+https://github.com/FillanL/Blogz-BackEnd
 
 ## Tech/framework used
 - ReactJS
@@ -20,5 +22,12 @@ Blogging platform where users can write personal blogs, share insights and discu
 - Delete blog posts
 - Edit user profile
 - Delete user profile
+
+
+ ## Instructions to get started
+- clone Repository 
+- npm install
+- npm start
+
 
 ## VIDEO DEMO
